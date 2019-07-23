@@ -3,6 +3,8 @@ description "libSSH dynamic binding"
 authors "deviator"
 license "MIT"
 
+stringImportPaths "source"
+
 configuration "rtload" {
     versions "libssh_rtload"
     dependency "ssll" version="~>0.1.0"

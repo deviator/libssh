@@ -319,22 +319,21 @@ enum ssh_publickey_hash_type {
     SSH_PUBLICKEY_HASH_MD5,
     SSH_PUBLICKEY_HASH_SHA256
 }
-
-/**
- * @brief SSH authentication callback.
- *
- * @param prompt        Prompt to be displayed.
- * @param buf           Buffer to save the password. You should null-terminate it.
- * @param len           Length of the buffer.
- * @param echo          Enable or disable the echo of what you type.
- * @param verify        Should the password be verified?
- * @param userdata      Userdata to be passed to the callback function. Useful
- *                      for GUI applications.
- *
- * @return              0 on success, < 0 on error.
- */
 extern (C)
 {
+    /**
+    * @brief SSH authentication callback.
+    *
+    * @param prompt        Prompt to be displayed.
+    * @param buf           Buffer to save the password. You should null-terminate it.
+    * @param len           Length of the buffer.
+    * @param echo          Enable or disable the echo of what you type.
+    * @param verify        Should the password be verified?
+    * @param userdata      Userdata to be passed to the callback function. Useful
+    *                      for GUI applications.
+    *
+    * @return              0 on success, < 0 on error.
+    */
     alias ssh_auth_callback = int function(const char* prompt, char* buf, size_t len,
         int echo, int verify, void* userdata);
 
