@@ -1,10 +1,10 @@
-module libssh.api.types;
+module libssh.types;
 
 alias int32_t = int;
 alias uint32_t = uint;
 alias uint16_t = ushort;
 alias uint8_t = ubyte;
-alias unit64_t = ulong;
+alias uint64_t = ulong;
 
 // unusable struct
 //struct ssh_counter_struct {
@@ -31,14 +31,17 @@ alias ssh_gssapi_creds = void*;
 
 version (Windows)
 {
-    alias SOCKET = size_t;
-    enum SOCKET INVALID_SOCKET = cast(SOCKET)~0;
-    enum int SOCKET_ERROR = -1;
+    public import core.sys.windows.winsock2 : timeval, fd_set, SOCKET;
 
     enum socket_t : SOCKET { INVALID_SOCKET }
+    alias mode_t = ushort;
 }
 version (Posix)
 {
+    public import core.sys.posix.sys.types : mode_t;
+    public import core.sys.posix.sys.time : timeval;
+    public import core.sys.posix.sys.select : fd_set;
+
     enum socket_t : int32_t { init = -1 }
 }
 
@@ -175,8 +178,6 @@ enum ssh_known_hosts_e {
      */
     SSH_KNOWN_HOSTS_OTHER,
 }
-
-enum MD5_DIGEST_LEN = 16;
 
 /* errors */
 
@@ -319,6 +320,7 @@ enum ssh_publickey_hash_type {
     SSH_PUBLICKEY_HASH_MD5,
     SSH_PUBLICKEY_HASH_SHA256
 }
+
 extern (C)
 {
     /**

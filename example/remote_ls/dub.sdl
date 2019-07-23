@@ -1,0 +1,2 @@
+name "remote_ls"
+dependency "libssh" path="../.."

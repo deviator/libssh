@@ -1,0 +1,7 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"libssh": {"path":"../.."},
+		"ssll": "0.1.0"
+	}
+}

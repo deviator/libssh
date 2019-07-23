@@ -1,14 +1,17 @@
 module libssh.mix;
 
 import std.array : appender;
-import std.string : lineSplitter, strip;
+import std.algorithm : map;
+import std.string : lineSplitter, strip, startsWith;
 import std.range : put;
 
-string appendToAllLines(string lines, string suffix)
+string appendToAllLines(string lines, string suffix, string g_prefix, string g_suffix)
 {
     auto buf = appender!string;
 
-    foreach (line; lines.lineSplitter)
+    put(buf, g_prefix);
+
+    foreach (line; lines.lineSplitter.map!strip)
     {
         if (line.startsWith("//")) // comment
         {
@@ -18,13 +21,15 @@ string appendToAllLines(string lines, string suffix)
         {
             put(buf, line[1..$]);
         }
-        else if (line.strip.length)
+        else if (line.length)
         {
             put(buf, line);
             put(buf, suffix);
         }
         put(buf, "\n");
     }
+
+    put(buf, g_suffix);
 
     return buf.data;
 }
@@ -42,27 +47,33 @@ unittest
     %}
     `;
 
-    static assert(appendToAllLines(src, ";") ==
-    `
-    int foo(int a, int b);
+    enum r1 = appendToAllLines(src, ";", "{", "}");
+    enum e1 = `{
+int foo(int a, int b);
 
-    // comment
+// comment
 
-    version (Windows) {}
-    else {
-        int bar(some / random % string);
-    }
-    `);
+version (Windows) {}
+else {
+int bar(some / random % string);
+}
 
-    static assert(appendToAllLines(src, "{ mixin(rtLib); }") ==
-    `
-    int foo(int a, int b){ mixin(rtLib); }
+}`;
 
-    // comment
+    static assert(r1 == e1);
 
-    version (Windows) {}
-    else {
-        int bar(some / random % string){ mixin(rtLib); }
-    }
-    `);
+    enum r2 = appendToAllLines(src, "{ mixin(rtLib); }", "", "");
+    enum e2 = `
+int foo(int a, int b){ mixin(rtLib); }
+
+// comment
+
+version (Windows) {}
+else {
+int bar(some / random % string){ mixin(rtLib); }
+}
+
+`;
+
+    static assert(r2 == e2);
 }

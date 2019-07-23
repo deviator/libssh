@@ -9,5 +9,5 @@ else:
 
 extern (C)
 {
-    mixin(appendToAllLines(import("libssh/funcs.txt"), ";"));
+    mixin(appendToAllLines(import("libssh/funcs.txt"), ";", "", ""));
 }

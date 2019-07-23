@@ -1,15 +1,16 @@
 name "libssh"
-description "libSSH dynamic binding"
+description "libSSH runtime loading and compile time linking binding"
 authors "deviator"
 license "MIT"
 
 stringImportPaths "source"
 
+configuration "ctlink" {
+    versions "libssh_ctlink"
+    libs "ssh"
+}
+
 configuration "rtload" {
     versions "libssh_rtload"
     dependency "ssll" version="~>0.1.0"
-}
-
-configuration "ctlink" {
-    versions "libssh_ctlink"
 }

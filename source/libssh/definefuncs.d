@@ -7,6 +7,7 @@ version (libssh_rtload)
 else
     import libssh.ctlink;
 
+version(none)
 pragma(inline, true)
 {
     void SSH_KNOWNHOSTS_ENTRY_FREE(ref ssh_knownhosts_entry* e)

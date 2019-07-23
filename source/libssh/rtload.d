@@ -1,8 +1,8 @@
-module libssh.api.rtload;
+module libssh.rtload;
 
 version (libssh_rtload):
 
-import libssh.api.types;
+import libssh.types;
 
 import ssll;
 
@@ -33,9 +33,6 @@ void unloadLibSSH()
     unloadLibrary(lib);
 }
 
-mixin apiSymbols;
+import libssh.mix;
 
-@api("lib")
-{
-    mixin(appendToAllLines(import("libssh/funcs.txt"), "{ mixin(rtLib); }"));
-}
+mixin(appendToAllLines(import("libssh/funcs.txt"), "{ mixin(rtLib); }", `mixin apiSymbols; @api("lib") {`, `}`));
