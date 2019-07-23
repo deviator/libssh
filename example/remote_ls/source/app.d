@@ -4,6 +4,8 @@ import std.string : toStringz, fromStringz;
 import libssh;
 import libssh.dconst;
 
+import libssh.server;
+
 int show_remote_files(ssh_session session)
 {
     ssh_channel channel = ssh_channel_new(session);
@@ -27,8 +29,6 @@ int show_remote_files(ssh_session session)
         nbytes = ssh_channel_read(channel, buffer.ptr, buffer.length, 0);
     }
     writeln(res);
-    
-    if (nbytes < 0) return SSH_RETCODE.ERROR;
 
     ssh_channel_send_eof(channel);
     return SSH_RETCODE.OK;
@@ -39,6 +39,7 @@ int main(string[] args)
     version (libssh_rtload)
     {
         loadLibSSH();
+        loadLibSSHServerSymbols();
         scope (exit) unloadLibSSH();
     }
 
@@ -54,7 +55,8 @@ int main(string[] args)
     rc = ssh_connect(my_ssh_session);
     if (rc != SSH_RETCODE.OK)
     {
-        stderr.writefln("Error connecting to localhost: %s", ssh_get_error(my_ssh_session).fromStringz);
+        stderr.writefln("Error connecting to localhost: %s",
+                        ssh_get_error(my_ssh_session).fromStringz);
         return -1;
     }
     scope (exit) ssh_disconnect(my_ssh_session);
@@ -63,13 +65,15 @@ int main(string[] args)
     rc = ssh_userauth_password(my_ssh_session, null, args[3].toStringz);
     if (rc != SSH_AUTH_RESULT.SUCCESS)
     {
-        stderr.writefln("Error authenticating with password: %s", ssh_get_error(my_ssh_session).fromStringz);
+        stderr.writefln("Error authenticating with password: %s",
+                        ssh_get_error(my_ssh_session).fromStringz);
         return -1;
     }
     rc = show_remote_files(my_ssh_session);
     if (rc != SSH_RETCODE.OK)
     {
-        stderr.writeln("Error authenticating with password: %s", ssh_get_error(my_ssh_session).fromStringz);
+        stderr.writefln("Error while show remote files: %s",
+                        ssh_get_error(my_ssh_session).fromStringz);
         return -1;
     }
 

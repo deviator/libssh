@@ -1,5 +1,7 @@
 module libssh.mix;
 
+package:
+
 import std.array : appender;
 import std.algorithm : map;
 import std.string : lineSplitter, strip, startsWith;
@@ -9,7 +11,11 @@ string appendToAllLines(string lines, string suffix, string g_prefix, string g_s
 {
     auto buf = appender!string;
 
-    put(buf, g_prefix);
+    if (g_prefix.length)
+    {
+        put(buf, g_prefix);
+        put(buf, "\n");
+    }
 
     foreach (line; lines.lineSplitter.map!strip)
     {
@@ -49,6 +55,7 @@ unittest
 
     enum r1 = appendToAllLines(src, ";", "{", "}");
     enum e1 = `{
+
 int foo(int a, int b);
 
 // comment
@@ -76,4 +83,13 @@ int bar(some / random % string){ mixin(rtLib); }
 `;
 
     static assert(r2 == e2);
+}
+
+string pastFunctions(string input, string libname="lib")
+{
+    version (libssh_rtload)
+        return appendToAllLines(input, "{ mixin(rtLib); }",
+                    `mixin apiSymbols; @api("`~libname~`") {`, `}`);
+    else
+        return appendToAllLines(input, ";", "extern (C) {", "}");
 }

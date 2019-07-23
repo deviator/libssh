@@ -1,0 +1,70 @@
+ssh_bind ssh_bind_new()
+int ssh_bind_options_set(ssh_bind sshbind, ssh_bind_options_e type, const void* value)
+int ssh_bind_listen(ssh_bind ssh_bind_o)
+int ssh_bind_set_callbacks(ssh_bind sshbind, ssh_bind_callbacks callbacks, void* userdata)
+void ssh_bind_set_blocking(ssh_bind ssh_bind_o, int blocking)
+socket_t ssh_bind_get_fd(ssh_bind ssh_bind_o)
+void ssh_bind_set_fd(ssh_bind ssh_bind_o, socket_t fd)
+void ssh_bind_fd_toaccept(ssh_bind ssh_bind_o)
+int ssh_bind_accept(ssh_bind ssh_bind_o, ssh_session session)
+int ssh_bind_accept_fd(ssh_bind ssh_bind_o, ssh_session session, socket_t fd)
+ssh_gssapi_creds ssh_gssapi_get_creds(ssh_session session)
+int ssh_handle_key_exchange(ssh_session session)
+int ssh_server_init_kex(ssh_session session)
+void ssh_bind_free(ssh_bind ssh_bind_o)
+void ssh_set_auth_methods(ssh_session session, int auth_methods)
+
+// SERVER MESSAGING
+int ssh_message_reply_default(ssh_message msg)
+const(char)* ssh_message_auth_user(ssh_message msg)
+const(char)* ssh_message_auth_password(ssh_message msg)
+ssh_key ssh_message_auth_pubkey(ssh_message msg)
+int ssh_message_auth_kbdint_is_response(ssh_message msg)
+ssh_publickey_state_e ssh_message_auth_publickey_state(ssh_message msg)
+int ssh_message_auth_reply_success(ssh_message msg, int partial)
+int ssh_message_auth_reply_pk_ok(ssh_message msg, ssh_string algo, ssh_string pubkey)
+int ssh_message_auth_reply_pk_ok_simple(ssh_message msg)
+int ssh_message_auth_set_methods(ssh_message msg, int methods)
+int ssh_message_auth_interactive_request(ssh_message msg, const char* name, const char* instruction, uint num_prompts, const char** prompts, char* echo)
+
+int ssh_message_service_reply_success(ssh_message msg)
+const(char)* ssh_message_service_service(ssh_message msg)
+
+int ssh_message_global_request_reply_success(ssh_message msg, uint16_t bound_port)
+
+void ssh_set_message_callback(ssh_session session, ssh_bind_message_callback callback, void *data)
+int ssh_execute_message_callbacks(ssh_session session)
+
+const(char)* ssh_message_channel_request_open_originator(ssh_message msg)
+int ssh_message_channel_request_open_originator_port(ssh_message msg)
+const(char)* ssh_message_channel_request_open_destination(ssh_message msg)
+int ssh_message_channel_request_open_destination_port(ssh_message msg)
+
+ssh_channel ssh_message_channel_request_channel(ssh_message msg)
+
+const(char)* ssh_message_channel_request_pty_term(ssh_message msg)
+int ssh_message_channel_request_pty_width(ssh_message msg)
+int ssh_message_channel_request_pty_height(ssh_message msg)
+int ssh_message_channel_request_pty_pxwidth(ssh_message msg)
+int ssh_message_channel_request_pty_pxheight(ssh_message msg)
+
+const(char)* ssh_message_channel_request_env_name(ssh_message msg)
+const(char)* ssh_message_channel_request_env_value(ssh_message msg)
+const(char)* ssh_message_channel_request_command(ssh_message msg)
+const(char)* ssh_message_channel_request_subsystem(ssh_message msg)
+
+int ssh_message_channel_request_x11_single_connection(ssh_message msg)
+const(char)* ssh_message_channel_request_x11_auth_protocol(ssh_message msg)
+const(char)* ssh_message_channel_request_x11_auth_cookie(ssh_message msg)
+int ssh_message_channel_request_x11_screen_number(ssh_message msg)
+
+const(char)* ssh_message_global_request_address(ssh_message msg)
+int ssh_message_global_request_port(ssh_message msg)
+
+int ssh_channel_open_reverse_forward(ssh_channel channel, const char* remotehost, int remoteport, const char* sourcehost, int localport)
+int ssh_channel_open_x11(ssh_channel channel, const char* orig_addr, int orig_port)
+
+int ssh_channel_request_send_exit_status(ssh_channel channel, int exit_status)
+int ssh_channel_request_send_exit_signal(ssh_channel channel, const char* signum, int core, const char* errmsg, const char* lang)
+
+int ssh_send_keepalive(ssh_session session)
