@@ -1,0 +1,13 @@
+name "libssh"
+description "libSSH dynamic binding"
+authors "deviator"
+license "MIT"
+
+configuration "rtload" {
+    versions "libssh_rtload"
+    dependency "ssll" version="~>0.1.0"
+}
+
+configuration "ctlink" {
+    versions "libssh_ctlink"
+}
