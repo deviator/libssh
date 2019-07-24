@@ -2,9 +2,6 @@ import std.stdio;
 import std.string : toStringz, fromStringz;
 
 import libssh;
-import libssh.dconst;
-
-import libssh.server;
 
 int show_remote_files(ssh_session session)
 {
@@ -38,8 +35,7 @@ int main(string[] args)
 {
     version (libssh_rtload)
     {
-        loadLibSSH();
-        loadLibSSHServerSymbols();
+        loadLibSSH(LoadApiSymbolsVerbose.message);
         scope (exit) unloadLibSSH();
     }
 

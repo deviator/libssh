@@ -4,24 +4,24 @@ import libssh.types;
 
 import libssh.mix;
 
-private enum funcstxt = import("libssh/funcs.txt");
-
 version (libssh_rtload)
 {
     import ssll;
+    public import ssll : LoadApiSymbolsVerbose;
 
-    version (Posix) private enum libNames = ["libssh.so"];
-    version (Windows) private enum libNames = ["libssh.dll"];
+    version (Posix)   enum libSSHNames = ["libssh.so"];
+    version (Windows) enum libSSHNames = ["libssh.dll"];
 
     package __gshared LibHandler lib;
 
-    void loadLibSSH(string[] names=[])
+    void loadLibSSH(LoadApiSymbolsVerbose verbose = LoadApiSymbolsVerbose.none,
+                    string[] names=libSSHNames)
     {
         import std.exception : enforce;
 
         if (lib !is null) return;
 
-        foreach (name; libNames~names)
+        foreach (name; names)
         {
             lib = loadLibrary(name);
             if (lib !is null) break;
@@ -29,7 +29,7 @@ version (libssh_rtload)
 
         enforce(lib, "can't load libssh");
 
-        loadApiSymbols();
+        loadApiSymbols(verbose);
     }
 
     void unloadLibSSH() { unloadLibrary(lib); }

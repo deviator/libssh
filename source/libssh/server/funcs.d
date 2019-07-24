@@ -9,9 +9,9 @@ version (libssh_rtload)
     import ssll;
     import libssh.funcs : lib;
 
-    void loadLibSSHServerSymbols()
+    void loadLibSSHServerSymbols(LoadApiSymbolsVerbose verbose = LoadApiSymbolsVerbose.message)
     {
-        loadApiSymbols(true);
+        loadApiSymbols(verbose);
     }
 }
 

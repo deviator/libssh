@@ -12,5 +12,5 @@ configuration "ctlink" {
 
 configuration "rtload" {
     versions "libssh_rtload"
-    dependency "ssll" version="~>0.1.0"
+    dependency "ssll" version="~>0.2.0"
 }
