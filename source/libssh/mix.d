@@ -88,8 +88,8 @@ int bar(some / random % string){ mixin(rtLib); }
 string pastFunctions(string input, string libname="lib")
 {
     version (libssh_rtload)
-        return appendToAllLines(input, "{ mixin(rtLib); }",
-                    `mixin apiSymbols; @api("`~libname~`") {`, `}`);
+        return appendToAllLines(input, "{ mixin(SSLL_CALL); }",
+                    `mixin SSLL_INIT; @api("`~libname~`") {`, `}`);
     else
         return appendToAllLines(input, ";", "extern (C) {", "}");
 }

@@ -13,3 +13,4 @@ docs/
 *.obj
 *.lst
 remote_ls
+dub.selections.json
